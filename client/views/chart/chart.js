@@ -14,69 +14,86 @@ Template.Chart.helpers({
   stockChart: function() {
     return {
       chart: {
-        type: 'spline',
+        type: 'area',
         animation: Highcharts.svg, // don't animate in old IE
-        marginRight: 10,
+        backgroundColor: 'rgba(255,255,255,0.002)',
+        spacing: [0, 0, 0, 0],
+        margin: [0, 0, 0, 0],
         events: {
-            load: function () {
-
-                // set up the updating of the chart each second
-                var series = this.series[0];
-                setInterval(function () {
-                    var x = (new Date()).getTime(), // current time
-                        y = Math.random();
-                    series.addPoint([x, y], true, true);
-                }, 1000);
-            }
+          load: function () {
+            var ch = this;
+            Tracker.autorun(function() {
+              Meteor.call('/app/chart/get/30day', Session.get('currentTicker'), function(err, reply) {
+                if (!err) {
+                  var price = [];
+                  for (var i = 0; i < reply.length; i++) {
+                    console.log(reply[i]);
+                    if (reply[i]) {
+                      price.push([reply[i].date.valueOf(),reply[i].close]);
+                    }
+                  }
+                  ch.addSeries({                        
+                    name: 'price',
+                    data: price,
+                    color: App.helpers.positionColor()
+                  }, false);
+                  ch.redraw();
+                  console.log('chart', ch);
+                }
+              });
+            });
+          }
         }
       },
       title: {
-          text: 'Live random data'
+        text: null,
       },
       xAxis: {
-          type: 'datetime',
-          tickPixelInterval: 150
+        type: 'datetime',
+        startOnTick: false,
+        tickPosition: 'inside',
+        minPadding: 0,
+        maxPadding: 0,
+        labels: {
+          style: {'color': 'white', 'text-transform': 'uppercase'},
+          align: 'left',
+          x: 15,
+          y: -5
+        }
       },
       yAxis: {
-          title: {
-              text: 'Value'
-          },
-          plotLines: [{
-              value: 0,
-              width: 1,
-              color: '#808080'
-          }]
+        title: {
+          text: null
+        },
+        labels: {
+          style: {color: '#CCCCCC'},
+          align: 'left',
+          x: 15,
+          y: -5
+        },
+        min: 50,
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: App.helpers.positionColor()
+        }]
       },
       tooltip: {
-          formatter: function () {
-              return '<b>' + this.series.name + '</b><br/>' +
-                  Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
-                  Highcharts.numberFormat(this.y, 2);
-          }
+        formatter: function () {
+          return '<b>' + this.series.name + '</b><br/>' +
+            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+            Highcharts.numberFormat(this.y, 2);
+        }
       },
       legend: {
-          enabled: false
+        enabled: false
       },
       exporting: {
-          enabled: false
+        enabled: false
       },
-      series: [{
-          name: 'Random data',
-          data: (function () {
-              // generate an array of random data
-              var data = [],
-                  time = (new Date()).getTime(),
-                  i;
-
-              for (i = -19; i <= 0; i += 1) {
-                  data.push({
-                      x: time + i * 1000,
-                      y: Math.random()
-                  });
-              }
-              return data;
-          }())
-      }]
+      credits: {
+        enabled: false
+      }
     }
   },
   pieChart: function() {

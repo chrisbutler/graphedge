@@ -1,3 +1,24 @@
 <template name="Chart">
-  {{> highchartsHelper chartId="stock" chartWidth="100%" charHeight="100%" chartObject=stockChart}}
+  <div class="video-holder">
+    <video autoplay loop>
+      <source src="http://hedgio.s3.amazonaws.com/backgrounds/{{fromSession 'currentPosition'}}.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div class="header">
+    <div class="ticker gradient white">
+      <span class="color {{fromSession 'currentPosition'}}">
+        {{fromSession 'currentTicker'}}
+      </span>
+    </div>
+    <div class="duration gradient {{fromSession 'currentPosition'}}">
+      {{fromSession 'currentDuration'}}
+    </div>
+    <div class="title">
+      {{fromSession 'currentTitle'}}
+    </div>
+  </div>
+  <div class="wrapper">
+    {{> highchartsHelper chartId="stock" chartWidth="100%" charHeight="100%" chartObject=stockChart}}
+  </div>
 </template>
