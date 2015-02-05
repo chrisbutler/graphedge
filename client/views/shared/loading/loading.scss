@@ -1,0 +1,105 @@
+/*****************************************************************************/
+/* Loading: Style */
+/*****************************************************************************/
+
+$ease-in-out: cubic-bezier(0.645, 0, 0.355, 1);
+
+.spinner, .spinner div {
+  box-sizing: border-box;
+}
+
+.spinner {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  -webkit-animation: rotate-all 1s linear infinite;
+}
+
+.right-side,
+.left-side {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+}
+
+.left-side {
+  left: 0;
+}
+
+.right-side {
+  right: 0;
+}
+
+.bar {
+  width: 100%;
+  height: 100%;
+  border-radius: 200px 0 0 200px;
+  border: 10px solid #666666;
+  position: relative;
+  &:after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    display: block;
+    background: #666666;
+    position: absolute;
+    border-radius: 10px;
+  }
+  .right-side & {
+    border-radius: 0 200px 200px 0;
+    border-left: none;
+    transform: rotate(-10deg);
+    transform-origin: left center;
+    &:after {
+      bottom: -10px;
+      left: -5px;
+    }
+    -webkit-animation: rotate-right 0.75s linear infinite alternate;
+  }
+  .left-side & {
+    border-right: none;
+    transform: rotate(10deg);
+    transform-origin: right center;
+    -webkit-animation: rotate-left 0.75s linear infinite alternate;
+    &:after {
+      bottom: -10px;
+      right: -5px;
+    }
+  }
+}
+
+@-webkit-keyframes rotate-left {
+  to {
+    transform: rotate(30deg);
+  }
+  from {
+    transform: rotate(175deg);
+  }
+}
+
+
+@-webkit-keyframes rotate-right {
+  from {
+    transform: rotate(-175deg);
+  }
+  to {
+    transform: rotate(-30deg);
+  }
+}
+
+
+@-webkit-keyframes rotate-all {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}

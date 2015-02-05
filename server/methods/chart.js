@@ -7,7 +7,7 @@ Meteor.methods({
     var Future = Npm.require('fibers/future');
     var fut = new Future();
     var end = moment();
-    console.log('30 day', start.format(), end.format(), ticker);
+    var start = moment().subtract(1, 'month');
     YahooFinance.historical({
       symbol: ticker,
       from: start.format(),

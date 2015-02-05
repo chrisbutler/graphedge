@@ -27,7 +27,6 @@ Template.Chart.helpers({
                 if (!err) {
                   var price = [];
                   for (var i = 0; i < reply.length; i++) {
-                    console.log(reply[i]);
                     if (reply[i]) {
                       price.push([reply[i].date.valueOf(),reply[i].close]);
                     }
@@ -38,7 +37,6 @@ Template.Chart.helpers({
                     color: App.helpers.positionColor()
                   }, false);
                   ch.redraw();
-                  console.log('chart', ch);
                 }
               });
             });
